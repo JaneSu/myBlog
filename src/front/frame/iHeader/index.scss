@@ -1,9 +1,29 @@
 .website-header {
-  height: .98rem;
+  height: .88rem;
   display: flex;
   align-items: center;
+  background: #3399CC;
+  padding: 0 .3rem;
+  box-sizing: border-box;
 
   .website-name {
-    font-size: 28rpx;
+    font-size: .28rem;
+    color: #000;
+    margin-right: 3rem;
+    font-weight: bold;
+  }
+
+  .website-navbar {
+    .nav-tab {
+      font-size: .18rem;
+      margin-right: .3rem;
+      text-decoration: none;
+      color: #000;
+    }
+
+    .active {
+      color: #fff;
+    }
+
   }
 }

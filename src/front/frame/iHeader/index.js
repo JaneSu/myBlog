@@ -1,19 +1,28 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { NavLink, withRouter } from 'react-router-dom'
 import config from '../../../config'
 import './index.scss'
 
 class IHeader extends React.Component {
+	constructor(props) {
+		super(props)
+		// this.props = props
+	}
+
 	render() {
 		return (
 			<header className="website-header">
 				<div className="website-name">{config.website_name}</div>
 				<div className="website-navbar">
-					<Link to="/front/home">首页</Link>
-					<Link to="/front/aboutme">关于我</Link>
+					<NavLink to="/front/home" activeClassName="active" className="nav-tab">
+						首页
+					</NavLink>
+					<NavLink to="/front/aboutme" activeClassName="active" className="nav-tab">
+						关于我
+					</NavLink>
 				</div>
 			</header>
 		)
 	}
 }
-export default IHeader
+export default withRouter(IHeader)
