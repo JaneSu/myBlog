@@ -1,0 +1,5 @@
+{
+  "globalDependencies": {
+    "react-router": "registry:dt/react-router#4.0.0+20170323201651"
+  }
+}
