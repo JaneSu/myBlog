@@ -1,0 +1,44 @@
+.container {
+  width: 60%;
+  margin: 0 auto 0;
+  padding-top: 0.4rem;
+  box-sizing: border-box;
+
+  .article-info {
+
+
+    .article-title {
+      text-align: center;
+      font-size: .36rem;
+    }
+
+    .information {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .date {
+        margin-right: .2rem;
+      }
+    }
+
+    .article-main {
+      margin-top: .3rem;
+      padding-bottom: .3rem;
+      border-bottom: 1px dashed #eee;
+    }
+  }
+
+  .page {
+    padding-top: .3rem;
+
+    .pre,
+    .next {
+      font-size: .14rem;
+    }
+
+    span {
+      cursor: pointer;
+    }
+  }
+}
