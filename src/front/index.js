@@ -12,7 +12,6 @@ class FrontIndex extends React.Component {
 				<Switch>
 					<Route path="/front/home" component={Home} />
 					<Route path="/front/aboutme" component={AboutMe} />
-					weishenme huizheayng
 				</Switch>
 			</div>
 		)
