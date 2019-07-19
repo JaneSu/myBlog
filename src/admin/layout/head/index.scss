@@ -1,0 +1,13 @@
+.admin-head {
+  display: flex;
+  justify-content: space-between;
+
+  .title {
+    color: #fff;
+  }
+
+  span {
+    font-size: .2rem;
+    color: #fff;
+  }
+}
