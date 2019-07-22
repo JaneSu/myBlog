@@ -13,12 +13,12 @@ let store = createStore(appState)
 function App() {
 	return (
 		<Provider store={store}>
-			<Router path='/'>
-				<div className='App'>
+			<Router path="/">
+				<div className="App">
 					<Switch>
-						<Route path='/front' component={FrontIndex} />
-						<Route path='/admin' component={AdminIndex} />
-						<Redirect path='/' to={{ pathname: '/front/home' }} />
+						<Route path="/front" component={FrontIndex} />
+						<Route path="/admin" component={AdminIndex} />
+						<Redirect path="/" to={{ pathname: '/front/home' }} />
 					</Switch>
 				</div>
 			</Router>

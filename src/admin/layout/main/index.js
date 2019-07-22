@@ -1,5 +1,7 @@
 import React from 'react'
-import ArticleIndex from '../../article'
+import { Route, Switch } from 'react-router-dom'
+import ArticleIndex from '../../article/list'
+import ArticleEdit from '../../article/edit'
 
 import './index.scss'
 
@@ -10,7 +12,10 @@ class MainIndex extends React.Component {
 	render() {
 		return (
 			<div className="main-container">
-				<ArticleIndex />
+				<Switch>
+					<Route path="/admin/article/index" component={ArticleIndex} />
+					<Route path="/admin/article/edit" component={ArticleEdit} />
+				</Switch>
 			</div>
 		)
 	}
