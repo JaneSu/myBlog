@@ -7,10 +7,10 @@ import { Route, Switch } from 'react-router-dom'
 class AdminIndex extends React.Component {
 	render() {
 		return (
-			<div className='admin-container' style={{ height: '100%' }}>
+			<div className="admin-container" style={{ height: '100%' }}>
 				<Switch>
-					<Route path='/admin/login' component={LoginIndex} />
-					<Route path='/admin/home' component={homeIndex} />
+					<Route path="/admin/login" component={LoginIndex} />
+					<Route path="/admin/" component={homeIndex} />
 				</Switch>
 			</div>
 		)
