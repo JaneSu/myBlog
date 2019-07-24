@@ -12,7 +12,6 @@ import { Route, Switch, withRouter } from 'react-router-dom'
 // }
 
 function RenderRoute(...a) {
-	debugger
 	return (
 		<Switch>
 			<Route />
