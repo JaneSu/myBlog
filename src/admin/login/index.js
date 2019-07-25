@@ -40,15 +40,15 @@ class Login extends Component {
 }
 
 Login.propTypes = {
-	loginType: PropTypes.string.isRequired
+	token: PropTypes.string.isRequired
 }
 
 const mapStateToProps = state => ({
-	loginType: state.loginType
+	token: state.loginInfo.token
 })
 
 const mapDispatchToProps = dispatch => ({
-	onClick: () => dispatch(login('true'))
+	onClick: () => dispatch(login('232131'))
 })
 
 export default connect(
