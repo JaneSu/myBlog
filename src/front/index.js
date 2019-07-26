@@ -11,9 +11,9 @@ class FrontIndex extends React.Component {
 			<div style={{ height: '100%' }}>
 				<IHeader />
 				<Switch>
-					<Route path="/front/home" component={Home} />
-					<Route path="/front/aboutme" component={AboutMe} />
-					<Route path="/front/article" component={ArticleInfo} />
+					<Route path='/front/index' component={Home} />
+					<Route path='/front/aboutme' component={AboutMe} />
+					<Route path='/front/article' component={ArticleInfo} />
 				</Switch>
 			</div>
 		)

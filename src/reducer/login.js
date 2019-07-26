@@ -1,10 +1,10 @@
-const loginType = (state = 'false', action) => {
+const loginInfo = (state = { token: '' }, action) => {
 	switch (action.type) {
 		case 'LOGIN':
-			return action.loginType
+			return { ...state, token: action.token }
 		default:
 			return state
 	}
 }
 
-export default loginType
+export default loginInfo

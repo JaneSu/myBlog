@@ -27,10 +27,10 @@ class ArticleIndex extends React.Component {
 					key: 'opt',
 					render: (text, record) => (
 						<div>
-							<Button type="primary" style={{ marginRight: '.2rem' }} onClick={e => this.toEditor('1')}>
+							<Button type='primary' style={{ marginRight: '.2rem' }} onClick={e => this.toEditor('1')}>
 								编辑
 							</Button>
-							<Button type="primary">下线</Button>
+							<Button type='primary'>下线</Button>
 						</div>
 					)
 				}
@@ -58,12 +58,12 @@ class ArticleIndex extends React.Component {
 	render() {
 		return (
 			<div>
-				<section className="handler-area">
-					<Button type="primary" onClick={e => this.toEditor()}>
+				<section className='handler-area'>
+					<Button type='primary' onClick={e => this.toEditor()}>
 						新增
 					</Button>
 				</section>
-				<section className="list-contain">
+				<section className='list-contain'>
 					<Table columns={this.state.columns} dataSource={this.state.data} pagination={{ pageSize: 10, showSizeChanger: true }} />
 				</section>
 			</div>

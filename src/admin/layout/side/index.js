@@ -3,32 +3,60 @@ import './index.scss'
 import { Menu, Icon } from 'antd'
 import { withRouter } from 'react-router-dom'
 
+const MENU_Array = new Map([
+	[
+		'article',
+		{
+			title: '文章管理',
+			path: '/admin/article/index',
+			key: 'article'
+		}
+	]
+])
+
 class PageSide extends React.Component {
 	constructor(props) {
 		super(props)
-		// this.goToPage = this.goToPage.call(this)
+		const { pathname } = props.location
+
+		this.state = {
+			defaultSelectedKeys: [this.getMapKey(pathname)]
+		}
 	}
 
 	goToPage({ item, key, keyPath, domEvent }) {
 		switch (key) {
 			case 'article':
-				this.props.push('/admin/article/index')
+				this.props.history.push(MENU_Array.get('article')['path'])
 				break
 		}
 	}
+
+	getMapKey(location) {
+		for (let [k, v] of MENU_Array) {
+			if (v.path === location) {
+				return k
+			}
+		}
+	}
+
 	render() {
+		const nodeItem = []
+		MENU_Array.forEach((value, key) => {
+			nodeItem.push(
+				<Menu.Item key={value.key}>
+					<Icon type='pie-chart' />
+					<span>{value.title}</span>
+				</Menu.Item>
+			)
+		})
+
+		const { defaultSelectedKeys } = this.state
+
 		return (
-			<div className="sider-page">
-				<Menu
-					mode="inline"
-					defaultSelectedKeys={['article']}
-					style={{ height: '100%', borderRight: 0 }}
-					onClick={({ item, key, keyPath, domEvent }) => this.goToPage({ item, key, keyPath, domEvent })}
-				>
-					<Menu.Item key="article">
-						<Icon type="pie-chart" />
-						<span>文章管理</span>
-					</Menu.Item>
+			<div className='sider-page'>
+				<Menu mode='inline' defaultSelectedKeys={defaultSelectedKeys} style={{ height: '100%', borderRight: 0 }} onClick={({ item, key, keyPath, domEvent }) => this.goToPage({ item, key, keyPath, domEvent })}>
+					{nodeItem}
 				</Menu>
 			</div>
 		)
