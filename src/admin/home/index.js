@@ -67,7 +67,9 @@ const mapDispatchToProps = dispatch => ({
 	}
 })
 
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(withRouter(HomeIndex))
+export default withRouter(
+	connect(
+		mapStateToProps,
+		mapDispatchToProps
+	)(HomeIndex)
+)

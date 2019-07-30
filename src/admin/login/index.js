@@ -25,7 +25,7 @@ class Login extends Component {
 		if (!password || !account) {
 			return message.warning('请填写用户名和密码')
 		}
-		axios('/login', {
+		axios('/login/', {
 			data: {
 				account,
 				password

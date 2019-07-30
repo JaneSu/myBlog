@@ -1,7 +1,7 @@
 import React from 'react'
 import './index.scss'
 import { withRouter } from 'react-router-dom'
-
+import axios from '../../../utils/axios'
 import { Table, Divider, Tag, Button } from 'antd'
 
 class ArticleIndex extends React.Component {
@@ -53,6 +53,21 @@ class ArticleIndex extends React.Component {
 			// 新文章
 			this.props.history.push('/admin/article/edit')
 		}
+	}
+
+	componentWillMount() {
+		axios('/article/index', {
+			method: 'get',
+			params: {
+				nowPage: 1,
+				pageSize: 10
+			}
+		}).then(({ data }) => {
+			this.setState({
+				data: data
+			})
+			// console.log(res)
+		})
 	}
 
 	render() {
