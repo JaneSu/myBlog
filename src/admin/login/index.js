@@ -35,6 +35,7 @@ class Login extends Component {
 				message.info('登录成功')
 				Cookie.set('token', res.data.token, { expires: 32 })
 				this.props.onClick(res.data.token)
+				console.log(this.props.token)
 				this.props.history.push('/admin/')
 			}
 		})

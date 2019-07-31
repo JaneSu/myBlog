@@ -1,6 +1,7 @@
 {
   "globalDependencies": {
     "axios": "registry:dt/axios#0.9.1+20161016142654",
+    "highlight.js": "registry:dt/highlight.js#9.1.0+20161227120821",
     "jest": "registry:dt/jest#19.2.0+20170312200138",
     "react-router": "registry:dt/react-router#4.0.0+20170323201651",
     "react-router-dom": "registry:dt/react-router-dom#4.0.0+20170323201651",

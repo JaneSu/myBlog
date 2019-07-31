@@ -24,14 +24,17 @@
   .article-line-main {
     margin-top: .2rem;
     font-size: .14rem;
+    padding-left: .2rem;
+    box-sizing: border-box;
   }
 
   .more {
     font-size: .12rem;
-    margin: .1rem 0 0;
+    margin: .3rem 0 0;
     color: #bfbfbf;
     display: flex;
     align-items: center;
+    // justify-content: flex-end;
     cursor: pointer;
   }
 

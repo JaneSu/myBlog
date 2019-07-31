@@ -9,7 +9,8 @@ const MENU_Array = new Map([
 		{
 			title: '文章管理',
 			path: '/admin/article/index',
-			key: 'article'
+			key: 'article',
+			filter: 'article'
 		}
 	]
 ])
@@ -34,7 +35,7 @@ class PageSide extends React.Component {
 
 	getMapKey(location) {
 		for (let [k, v] of MENU_Array) {
-			if (v.path === location) {
+			if (location.indexOf(v.filter) !== -1) {
 				return k
 			}
 		}

@@ -5,11 +5,9 @@
   box-sizing: border-box;
 
   .article-info {
-
-
     .article-title {
       text-align: center;
-      font-size: .36rem;
+      font-size: 0.36rem;
     }
 
     .information {
@@ -18,27 +16,35 @@
       align-items: center;
 
       .date {
-        margin-right: .2rem;
+        margin-right: 0.2rem;
       }
     }
 
     .article-main {
-      margin-top: .3rem;
-      padding-bottom: .3rem;
+      margin-top: 0.3rem;
+      padding-bottom: 0.3rem;
       border-bottom: 1px dashed #eee;
     }
   }
 
   .page {
-    padding-top: .3rem;
+    padding-top: 0.3rem;
 
     .pre,
     .next {
-      font-size: .14rem;
+      font-size: 0.14rem;
     }
 
     span {
       cursor: pointer;
     }
+  }
+
+  .tool-bar {
+    display: none;
+  }
+
+  .rc-md-editor {
+    border: none;
   }
 }
