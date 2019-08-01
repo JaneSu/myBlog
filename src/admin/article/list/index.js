@@ -12,11 +12,17 @@ class ArticleIndex extends React.Component {
 			columns: [
 				{
 					title: '标题',
-					dataIndex: 'title'
+					dataIndex: 'title',
+					width: 500
 				},
 				{
 					title: '分类',
 					dataIndex: 'category'
+					// render: (text, record) => {
+					// 	return text.map(item => {
+					// 		return <span>{item.label}</span>
+					// 	})
+					// }
 				},
 				{
 					title: '状态',
@@ -55,6 +61,8 @@ class ArticleIndex extends React.Component {
 			pageIndex: 1,
 			pageSize: 10
 		}
+
+		this.onPage = this.onPage.bind(this)
 	}
 
 	/**
@@ -63,6 +71,7 @@ class ArticleIndex extends React.Component {
 	 * @memberof ArticleIndex
 	 */
 	deleteArticle(id = 0) {
+		let _this = this
 		confirm({
 			title: '确认要删除该文章么',
 			okText: '删除',
@@ -74,7 +83,7 @@ class ArticleIndex extends React.Component {
 						id
 					}
 				}).then(({ data }) => {
-					this.getList()
+					_this.getList()
 				})
 			},
 			onCancel() {}
@@ -113,6 +122,16 @@ class ArticleIndex extends React.Component {
 		}
 	}
 
+	onPage(pagination, filters, sorter) {
+		let nowPage = pagination.current
+		this.setState(
+			{
+				pageIndex: nowPage
+			},
+			this.getList
+		)
+	}
+
 	/**
 	 * @description 获取列表数据
 	 * @memberof ArticleIndex
@@ -124,9 +143,10 @@ class ArticleIndex extends React.Component {
 				nowPage: this.state.pageIndex,
 				pageSize: this.state.pageSize
 			}
-		}).then(({ data: { list, count } }) => {
+		}).then(({ data: { list, total } }) => {
 			this.setState({
-				tableList: list
+				tableList: list,
+				total
 			})
 			// console.log(res)
 		})
@@ -145,7 +165,7 @@ class ArticleIndex extends React.Component {
 					</Button>
 				</section>
 				<section className='list-contain'>
-					<Table columns={this.state.columns} dataSource={this.state.tableList} pagination={{ pageSize: this.state.pageSize, showSizeChanger: true, defaultCurrent: this.state.pageIndex, total: this.state.total }} />
+					<Table columns={this.state.columns} bordered={true} dataSource={this.state.tableList}  pagination={{ pageSize: this.state.pageSize, showSizeChanger: true, defaultCurrent: this.state.pageIndex, total: this.state.total }} onChange={this.onPage} />
 				</section>
 			</div>
 		)

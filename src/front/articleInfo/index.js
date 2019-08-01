@@ -14,29 +14,52 @@ class ArticleInfo extends React.Component {
 			mainBody: '',
 			title: '',
 			createTime: '',
-			category: ''
+			category: '',
+			pre: [],
+			next: []
 		}
 	}
 	componentWillMount() {
 		let params = new URLSearchParams(this.props.history.location.search)
 		let id = params.get('id')
+		this.getInfo(id)
+	}
+	getInfo(id) {
 		axios('/article/front/info', {
 			method: 'get',
 			data: {
 				id
 			}
-		}).then(({ data: { mainBody, category, createTime, title } }) => {
+		}).then(({ data: { mainBody, category, createTime, title, pre, next } }) => {
 			this.setState({
 				mainBody,
 				title,
 				createTime,
-				category
+				category,
+				pre,
+				next
 			})
 		})
 	}
 
 	render() {
-		const { mainBody } = this.state
+		const { mainBody, pre, next } = this.state
+		let preNode = '',
+			nextNode = ''
+		if (pre.length) {
+			preNode = (
+				<p className='pre' onClick={this.getInfo.bind(this, pre[0]._id)}>
+					上一篇：<span>{pre[0].title}</span>
+				</p>
+			)
+		}
+		if (next.length) {
+			nextNode = (
+				<p className='pre' onClick={this.getInfo.bind(this, next[0]._id)}>
+					下一篇：<span>{next[0].title}</span>
+				</p>
+			)
+		}
 
 		return (
 			<div className='container'>
@@ -62,12 +85,8 @@ class ArticleInfo extends React.Component {
 					</main>
 				</article>
 				<div className='page'>
-					<p className='pre'>
-						上一篇：<span>123</span>
-					</p>
-					<p className='next'>
-						下一篇：<span>123</span>
-					</p>
+					{preNode}
+					{nextNode}
 				</div>
 			</div>
 		)

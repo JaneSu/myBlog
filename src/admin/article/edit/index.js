@@ -89,6 +89,7 @@ class ArticleEdit extends React.Component {
 	 */
 	emitArticle() {
 		this.props.form.validateFieldsAndScroll((err, values) => {
+			if (err) return
 			let url = '/article/add'
 			let desc = this.mdEditor.getHtmlValue()
 
@@ -143,9 +144,9 @@ class ArticleEdit extends React.Component {
 					<Form.Item label='分类'>
 						{getFieldDecorator('category', {
 							initialValue: this.state.category.length !== 0 ? this.state.category : [],
-							rules: [{ type: 'array', required: true, message: '请输入分类' }]
+							rules: [{ type: 'string', required: true, message: '请输入分类' }]
 						})(
-							<Select mode='multiple' style={{ width: '40%' }} placeholder='Please select'>
+							<Select style={{ width: '40%' }} placeholder='选择分类'>
 								{this.state.categoryList.map((item, index) => {
 									return (
 										<Option key={index} value={item._id}>

@@ -46,9 +46,7 @@ class FrontIndex extends React.Component {
 			draw()
 		}
 
-		window.addEventListener('load', init(150))
-
-	
+		window.addEventListener('load', init(120))
 	}
 	render() {
 		return (
@@ -59,7 +57,7 @@ class FrontIndex extends React.Component {
 					<Route path='/front/aboutme' component={AboutMe} />
 					<Route path='/front/article' component={ArticleInfo} />
 				</Switch>
-				<canvas id='canvas' style={{ position: 'fixed', top: 0, right: 0, bottom: 0, width: '100%', height: '100%',zIndex:'-1' }} />
+				<canvas id='canvas' style={{ position: 'fixed', top: 0, right: 0, bottom: 0, width: '100%', height: '100%', zIndex: '-1' }} />
 			</div>
 		)
 	}
