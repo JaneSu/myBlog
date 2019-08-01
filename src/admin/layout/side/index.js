@@ -9,7 +9,17 @@ const MENU_Array = new Map([
 		{
 			title: '文章管理',
 			path: '/admin/article/index',
-			key: 'article'
+			key: 'article',
+			filter: 'article'
+		}
+	],
+	[
+		'category',
+		{
+			title: '类目管理',
+			path: '/admin/category/index',
+			key: 'category',
+			filter: 'category'
 		}
 	]
 ])
@@ -29,12 +39,15 @@ class PageSide extends React.Component {
 			case 'article':
 				this.props.history.push(MENU_Array.get('article')['path'])
 				break
+			case 'category':
+				this.props.history.push(MENU_Array.get('category')['path'])
+				break
 		}
 	}
 
 	getMapKey(location) {
 		for (let [k, v] of MENU_Array) {
-			if (v.path === location) {
+			if (location.indexOf(v.filter) !== -1) {
 				return k
 			}
 		}

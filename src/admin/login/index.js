@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { login } from '../../action'
 import PropTypes from 'prop-types'
 import axios from '../../utils/axios'
+import Cookie from 'js-cookie'
 
 import { Input, notification, Button, message } from 'antd'
 import fontDesc_2 from '../../images/1563504753_762569.png'
@@ -24,7 +25,7 @@ class Login extends Component {
 		if (!password || !account) {
 			return message.warning('请填写用户名和密码')
 		}
-		axios('/login', {
+		axios('/login/', {
 			data: {
 				account,
 				password
@@ -32,8 +33,10 @@ class Login extends Component {
 		}).then(res => {
 			if (res.code === 200) {
 				message.info('登录成功')
-				this.props.history.push('/admin/')
+				Cookie.set('token', res.data.token, { expires: 32 })
 				this.props.onClick(res.data.token)
+				console.log(this.props.token)
+				this.props.history.push('/admin/')
 			}
 		})
 	}

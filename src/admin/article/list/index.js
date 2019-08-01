@@ -1,8 +1,9 @@
 import React from 'react'
 import './index.scss'
 import { withRouter } from 'react-router-dom'
-
-import { Table, Divider, Tag, Button } from 'antd'
+import axios from '../../../utils/axios'
+import { Table, Divider, Tag, Button, Modal } from 'antd'
+const { confirm } = Modal
 
 class ArticleIndex extends React.Component {
 	constructor(props) {
@@ -11,40 +12,106 @@ class ArticleIndex extends React.Component {
 			columns: [
 				{
 					title: '标题',
-					dataIndex: 'title'
+					dataIndex: 'title',
+					width: 500
+				},
+				{
+					title: '分类',
+					dataIndex: 'category'
+					// render: (text, record) => {
+					// 	return text.map(item => {
+					// 		return <span>{item.label}</span>
+					// 	})
+					// }
+				},
+				{
+					title: '状态',
+					dataIndex: 'online',
+					render: (text, record) => {
+						return <span>{text ? '已上线' : '已下线'}</span>
+					}
 				},
 				{
 					title: '创建时间',
 					dataIndex: 'createTime'
 				},
-				{
-					title: '分类',
-					dataIndex: 'category'
-				},
 
 				{
 					title: '操作',
 					key: 'opt',
-					render: (text, record) => (
-						<div>
-							<Button type='primary' style={{ marginRight: '.2rem' }} onClick={e => this.toEditor('1')}>
-								编辑
-							</Button>
-							<Button type='primary'>下线</Button>
-						</div>
-					)
+					render: (text, record) => {
+						return (
+							<div>
+								<Button type='primary' style={{ marginRight: '.2rem' }} onClick={e => this.toEditor(text._id)}>
+									编辑
+								</Button>
+								<Button type='' style={{ marginRight: '.2rem' }} onClick={e => this.changeStatus(text._id, text.online)}>
+									{text.online ? '下线' : '上线'}
+								</Button>
+								<Button type='danger' onClick={e => this.deleteArticle(text._id)}>
+									删除
+								</Button>
+							</div>
+						)
+					}
 				}
 			],
-			data: [
-				{
-					title: '测试文章',
-					createTime: '2019-10-10',
-					category: '通用'
-				}
-			]
+			tableList: [],
+			total: 0,
+			pageIndex: 1,
+			pageSize: 10
 		}
+
+		this.onPage = this.onPage.bind(this)
 	}
 
+	/**
+	 * @description 删除文章
+	 * @param {number} [id=0]
+	 * @memberof ArticleIndex
+	 */
+	deleteArticle(id = 0) {
+		let _this = this
+		confirm({
+			title: '确认要删除该文章么',
+			okText: '删除',
+			okType: 'danger',
+			cancelText: '取消',
+			onOk() {
+				axios('/article/delete', {
+					data: {
+						id
+					}
+				}).then(({ data }) => {
+					_this.getList()
+				})
+			},
+			onCancel() {}
+		})
+	}
+
+	/**
+	 * @description 改变文章状态
+	 * @param {number} [id=0]          文章id
+	 * @param {boolean} [status=true]  当前的文章状态
+	 * @memberof ArticleIndex
+	 */
+	changeStatus(id = 0, status = true) {
+		axios('/article/update', {
+			data: {
+				id,
+				online: !status
+			}
+		}).then(({ data }) => {
+			this.getList()
+		})
+	}
+
+	/**
+	 * @description 前往编辑页面
+	 * @param {*} id
+	 * @memberof ArticleIndex
+	 */
 	toEditor(id) {
 		if (id) {
 			// 编辑旧文章
@@ -53,6 +120,40 @@ class ArticleIndex extends React.Component {
 			// 新文章
 			this.props.history.push('/admin/article/edit')
 		}
+	}
+
+	onPage(pagination, filters, sorter) {
+		let nowPage = pagination.current
+		this.setState(
+			{
+				pageIndex: nowPage
+			},
+			this.getList
+		)
+	}
+
+	/**
+	 * @description 获取列表数据
+	 * @memberof ArticleIndex
+	 */
+	getList() {
+		axios('/article/index', {
+			method: 'get',
+			data: {
+				nowPage: this.state.pageIndex,
+				pageSize: this.state.pageSize
+			}
+		}).then(({ data: { list, total } }) => {
+			this.setState({
+				tableList: list,
+				total
+			})
+			// console.log(res)
+		})
+	}
+
+	componentWillMount() {
+		this.getList()
 	}
 
 	render() {
@@ -64,7 +165,7 @@ class ArticleIndex extends React.Component {
 					</Button>
 				</section>
 				<section className='list-contain'>
-					<Table columns={this.state.columns} dataSource={this.state.data} pagination={{ pageSize: 10, showSizeChanger: true }} />
+					<Table columns={this.state.columns} bordered={true} dataSource={this.state.tableList}  pagination={{ pageSize: this.state.pageSize, showSizeChanger: true, defaultCurrent: this.state.pageIndex, total: this.state.total }} onChange={this.onPage} />
 				</section>
 			</div>
 		)

@@ -11,13 +11,13 @@ class IHeader extends React.Component {
 
 	render() {
 		return (
-			<header className="website-header">
-				<div className="website-name">{config.website_name}</div>
-				<div className="website-navbar">
-					<NavLink to="/front/home" activeClassName="active" className="nav-tab">
+			<header className='website-header'>
+				<div className='website-name'>{config.website_name}</div>
+				<div className='website-navbar'>
+					<NavLink to='/front/index' activeClassName='active' className='nav-tab'>
 						首页
 					</NavLink>
-					<NavLink to="/front/aboutme" activeClassName="active" className="nav-tab">
+					<NavLink to='/front/aboutme' activeClassName='active' className='nav-tab'>
 						关于我
 					</NavLink>
 				</div>
