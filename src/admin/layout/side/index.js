@@ -12,6 +12,15 @@ const MENU_Array = new Map([
 			key: 'article',
 			filter: 'article'
 		}
+	],
+	[
+		'category',
+		{
+			title: '类目管理',
+			path: '/admin/category/index',
+			key: 'category',
+			filter: 'category'
+		}
 	]
 ])
 
@@ -29,6 +38,9 @@ class PageSide extends React.Component {
 		switch (key) {
 			case 'article':
 				this.props.history.push(MENU_Array.get('article')['path'])
+				break
+			case 'category':
+				this.props.history.push(MENU_Array.get('category')['path'])
 				break
 		}
 	}

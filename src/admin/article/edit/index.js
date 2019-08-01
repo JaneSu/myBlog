@@ -18,7 +18,8 @@ class ArticleEdit extends React.Component {
 			mainBody: '',
 			id: '',
 			title: '',
-			category: []
+			category: [],
+			categoryList: []
 		}
 	}
 
@@ -32,6 +33,9 @@ class ArticleEdit extends React.Component {
 		}
 	}
 
+	componentWillMount() {
+		this.getCategoryList()
+	}
 	/**
 	 * @description 获取文章详情
 	 * @param {*} id  文章id
@@ -64,37 +68,56 @@ class ArticleEdit extends React.Component {
 		})
 	}
 
+	// 获取分类列表
+	getCategoryList() {
+		axios('/category/list', {
+			method: 'get',
+			data: {
+				pageIndex: 1,
+				pageSize: 10
+			}
+		}).then(res => {
+			this.setState({
+				categoryList: [...res.data]
+			})
+		})
+	}
+
 	/**
 	 * @description 提交数据
 	 * @memberof ArticleEdit
 	 */
 	emitArticle() {
-		let url = '/article/add'
-		let desc = this.mdEditor.getHtmlValue()
+		this.props.form.validateFieldsAndScroll((err, values) => {
+			let url = '/article/add'
+			let desc = this.mdEditor.getHtmlValue()
 
-		// 截取一部分作为简介保存，减少数据量
-		let descArr = desc.split('\n')
-		desc = ''
+			// 截取一部分作为简介保存，减少数据量
+			let descArr = desc.split('\n')
+			desc = ''
 
-		for (let i = 0; i < descArr.length; i++) {
-			if (i > 6) break
-			desc = desc + descArr[i] + '\n'
-		}
-		let data = {
-			title: this.state.title,
-			category: ['测试分类'],
-			mainBody: this.state.mainBody,
-			desc
-		}
-		if (this.state.id) {
-			url = '/article/update'
-			data.id = this.state.id
-		}
-		axios(url, {
-			data
-		}).then(res => {
-			console.log(res)
-			this.cancelEditor()
+			for (let i = 0; i < descArr.length; i++) {
+				if (i > 6) break
+				desc = desc + descArr[i] + '\n'
+			}
+
+			let data = {
+				// title: this.state.title,
+				// category: this.props.form.getFieldsValue()['category'],
+				...values,
+				mainBody: this.state.mainBody,
+				desc
+			}
+			if (this.state.id) {
+				url = '/article/update'
+				data.id = this.state.id
+			}
+			axios(url, {
+				data
+			}).then(res => {
+				console.log(res)
+				this.cancelEditor()
+			})
 		})
 	}
 
@@ -120,10 +143,16 @@ class ArticleEdit extends React.Component {
 					<Form.Item label='分类'>
 						{getFieldDecorator('category', {
 							initialValue: this.state.category.length !== 0 ? this.state.category : [],
-							rules: [{ type: 'string', required: true, message: '请输入分类' }]
+							rules: [{ type: 'array', required: true, message: '请输入分类' }]
 						})(
 							<Select mode='multiple' style={{ width: '40%' }} placeholder='Please select'>
-								{[]}
+								{this.state.categoryList.map((item, index) => {
+									return (
+										<Option key={index} value={item._id}>
+											{item.label}
+										</Option>
+									)
+								})}
 							</Select>
 						)}
 					</Form.Item>
