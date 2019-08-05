@@ -2,6 +2,7 @@ import React from 'react'
 import { Route, Switch, withRouter } from 'react-router-dom'
 import ArticleMain from '../article'
 import CategoryMain from '../category'
+import SettingMain from '../setting'
 import Head from '../layout/head/index'
 import Side from '../layout/side/index'
 import Summary from '../summary'
@@ -47,6 +48,7 @@ class HomeIndex extends React.Component {
 								<Route exact path={match.path} component={Summary} />
 								<Route path={match.path + '/article'} component={ArticleMain} />
 								<Route path={match.path + '/category'} component={CategoryMain} />
+								<Route path={match.path + '/setting/index'} component={SettingMain} />
 							</Switch>
 						</div>
 					</Content>

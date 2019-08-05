@@ -1,3 +1,14 @@
-.about-me-h2 {
-  font-size: .45rem;
+.front-home-page {
+  .about-me-h2 {
+    font-size: 0.25rem;
+  }
+
+  .tool-bar {
+    display: none;
+  }
+
+  .rc-md-editor {
+    border: none;
+    background: transparent;
+  }
 }

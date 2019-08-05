@@ -21,6 +21,15 @@ const MENU_Array = new Map([
 			key: 'category',
 			filter: 'category'
 		}
+	],
+	[
+		'setting',
+		{
+			title: '系统设置',
+			path: '/admin/setting/index',
+			key: 'setting',
+			filter: 'setting'
+		}
 	]
 ])
 
@@ -34,15 +43,13 @@ class PageSide extends React.Component {
 		}
 	}
 
+	/**
+	 * @description 跳转到相应页面
+	 * @param {*} { item, key, keyPath, domEvent }
+	 * @memberof PageSide
+	 */
 	goToPage({ item, key, keyPath, domEvent }) {
-		switch (key) {
-			case 'article':
-				this.props.history.push(MENU_Array.get('article')['path'])
-				break
-			case 'category':
-				this.props.history.push(MENU_Array.get('category')['path'])
-				break
-		}
+		this.props.history.push(MENU_Array.get(key)['path'])
 	}
 
 	getMapKey(location) {
