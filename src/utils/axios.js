@@ -38,7 +38,7 @@ instance.interceptors.response.use(
 			case 2010:
 				message.error(responseData.msg)
 				setTimeout(() => {
-					window.location.href = '/admin/login'
+					// window.location.href = '/admin/login'
 				}, 2000)
 				break
 		}

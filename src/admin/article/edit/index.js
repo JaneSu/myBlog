@@ -6,8 +6,14 @@ import MarkdownIt from 'markdown-it'
 import axios from '../../../utils/axios'
 import { withRouter } from 'react-router-dom'
 
-import { Input, Form, Select, Button } from 'antd'
+import { Input, Form, Select, Button, Upload, Icon, message } from 'antd'
 const { Option } = Select
+
+function getBase64(img, callback) {
+	const reader = new FileReader()
+	reader.addEventListener('load', () => callback(reader.result))
+	reader.readAsDataURL(img)
+}
 
 class ArticleEdit extends React.Component {
 	constructor(props) {
@@ -19,8 +25,13 @@ class ArticleEdit extends React.Component {
 			id: '',
 			title: '',
 			category: [],
-			categoryList: []
+			categoryList: [],
+			loading: false,
+			imageUrl: '',
+			qiniuToken: ''
 		}
+
+		this.uploadImage = this.uploadImage.bind(this)
 	}
 
 	componentDidMount() {
@@ -31,6 +42,31 @@ class ArticleEdit extends React.Component {
 			// 编辑文章
 			this.getArticleInfo(id)
 		}
+	}
+	beforeUpload(file, FileList) {
+		console.log(file, FileList)
+		return new Promise((resolve, reject) => {
+
+			const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
+			if (!isJpgOrPng) {
+				message.error('You can only upload JPG/PNG file!')
+			}
+			const isLt2M = file.size / 1024 / 1024 < 2
+			if (!isLt2M) {
+				message.error('Image must smaller than 2MB!')
+			}
+			axios('/upload', {
+				method: 'get'
+			}).then(res => {
+				console.log(res)
+				this.setState({
+					qiniuToken: res.data
+				})
+				setTimeout(() => {
+					resolve()
+				}, 200)
+			})
+		})
 	}
 
 	componentWillMount() {
@@ -83,6 +119,23 @@ class ArticleEdit extends React.Component {
 		})
 	}
 
+	uploadImage(info) {
+		if (info.file.status === 'uploading') {
+			this.setState({ loading: true })
+			return
+		}
+		if (info.file.status === 'done') {
+console.log(info)
+			// Get this url from response in real world.
+			getBase64(info.file.originFileObj, imageUrl =>
+				this.setState({
+					imageUrl,
+					loading: false
+				})
+			)
+		}
+	}
+
 	/**
 	 * @description 提交数据
 	 * @memberof ArticleEdit
@@ -131,7 +184,15 @@ class ArticleEdit extends React.Component {
 	}
 
 	render() {
+		const uploadButton = (
+			<div>
+				<Icon type={this.state.loading ? 'loading' : 'plus'} />
+				<div className='ant-upload-text'>Upload</div>
+			</div>
+		)
+
 		const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form
+		const { imageUrl } = this.state
 		return (
 			<div className='article-edit-contain'>
 				<Form labelCol={{ span: 1 }}>
@@ -155,6 +216,16 @@ class ArticleEdit extends React.Component {
 									)
 								})}
 							</Select>
+						)}
+					</Form.Item>
+					<Form.Item label='题图'>
+						{getFieldDecorator('image', {
+							initialValue: this.state.category.length !== 0 ? this.state.category : [],
+							rules: [{ type: 'string', required: true, message: '请选择图片' }]
+						})(
+							<Upload name='file' listType='picture-card' className='avatar-uploader' data={{ token: this.state.qiniuToken }} showUploadList={false} action='http://up-z2.qiniup.com' beforeUpload={this.beforeUpload.bind(this)} onChange={this.uploadImage}>
+								{imageUrl ? <img src={imageUrl} alt='avatar' style={{ width: '100%' }} /> : uploadButton}
+							</Upload>
 						)}
 					</Form.Item>
 					<Form.Item label='内容'>
