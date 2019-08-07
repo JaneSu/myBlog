@@ -46,7 +46,6 @@ class ArticleEdit extends React.Component {
 	beforeUpload(file, FileList) {
 		console.log(file, FileList)
 		return new Promise((resolve, reject) => {
-
 			const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
 			if (!isJpgOrPng) {
 				message.error('You can only upload JPG/PNG file!')
@@ -88,7 +87,9 @@ class ArticleEdit extends React.Component {
 				title: data.title,
 				mainBody: data.mainBody,
 				category: data.category,
-				id: data._id
+				categoryId: data.categoryId,
+				id: data._id,
+				imageUrl: data.image
 			})
 		})
 	}
@@ -125,7 +126,7 @@ class ArticleEdit extends React.Component {
 			return
 		}
 		if (info.file.status === 'done') {
-console.log(info)
+			console.log(info)
 			// Get this url from response in real world.
 			getBase64(info.file.originFileObj, imageUrl =>
 				this.setState({
@@ -133,6 +134,7 @@ console.log(info)
 					loading: false
 				})
 			)
+			return info.file.response.hash
 		}
 	}
 
@@ -204,7 +206,7 @@ console.log(info)
 					</Form.Item>
 					<Form.Item label='分类'>
 						{getFieldDecorator('category', {
-							initialValue: this.state.category.length !== 0 ? this.state.category : [],
+							initialValue: this.state.categoryId || '',
 							rules: [{ type: 'string', required: true, message: '请输入分类' }]
 						})(
 							<Select style={{ width: '40%' }} placeholder='选择分类'>
@@ -220,10 +222,13 @@ console.log(info)
 					</Form.Item>
 					<Form.Item label='题图'>
 						{getFieldDecorator('image', {
-							initialValue: this.state.category.length !== 0 ? this.state.category : [],
-							rules: [{ type: 'string', required: true, message: '请选择图片' }]
+							initialValue: this.state.imageUrl ? this.state.imageUrl : '',
+							getValueFromEvent: this.uploadImage,
+
+							rules: [{ type: 'string', required: true, message: '请选择图片' }],
+							normalize: this.normalizeImage
 						})(
-							<Upload name='file' listType='picture-card' className='avatar-uploader' data={{ token: this.state.qiniuToken }} showUploadList={false} action='http://up-z2.qiniup.com' beforeUpload={this.beforeUpload.bind(this)} onChange={this.uploadImage}>
+							<Upload name='file' listType='picture-card' data={{ token: this.state.qiniuToken }} showUploadList={false} action='http://up-z2.qiniup.com' beforeUpload={this.beforeUpload.bind(this)}>
 								{imageUrl ? <img src={imageUrl} alt='avatar' style={{ width: '100%' }} /> : uploadButton}
 							</Upload>
 						)}

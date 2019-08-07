@@ -37,7 +37,7 @@ class Home extends React.Component {
 			<div className='front-home-page'>
 				<section className='main-part'>
 					{list.map(item => {
-						return <ArticleLine title={item.title} date={item.createTime} label={[item.category]} main={item.mainBody} id={item._id} desc={item.desc} />
+						return <ArticleLine title={item.title} date={item.createTime} label={[item.category]} main={item.mainBody} id={item._id} desc={item.desc} image={item.image}/>
 					})}
 				</section>
 				<section className='page-contain'>
