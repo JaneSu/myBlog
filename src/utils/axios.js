@@ -8,7 +8,7 @@ const router = new BrowserRouter()
 const instance = axios.create({
 	// baseURL: ' https://easy-mock.com/mock/5d0502a1bc72966b65143a2b/blog',
 	baseURL: 'http://127.0.0.1:3000/api',
-	// baseURL: 'http://fatearia.com:3000/api',
+	// baseURL: 'http://fatearia.com/api',
 	// baseURL: 'http://47.107.40.124/api',
 	timeout: 1000,
 	headers: {}
