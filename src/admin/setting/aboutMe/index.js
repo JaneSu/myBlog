@@ -49,7 +49,7 @@ class AboutUs extends React.Component {
 	}
 	render() {
 		return (
-			<div>
+			<div className='about-me'>
 				<MdEditor
 					value={this.state.mainBody}
 					renderHTML={text => this.mdParser.render(text)}

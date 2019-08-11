@@ -1,51 +1,54 @@
 .container {
-  width: 60%;
-  margin: 0 auto 0;
-  padding-top: 0.4rem;
-  box-sizing: border-box;
+	width: 60%;
+	margin: 0 auto 0;
+	padding-top: 0.4rem;
+	box-sizing: border-box;
 
-  .article-info {
-    .article-title {
-      text-align: center;
-      font-size: 0.36rem;
-    }
+	.article-info {
+		.article-title {
+			text-align: center;
+			font-size: 0.42rem;
+		}
 
-    .information {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+		.information {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-size: 0.14rem;
+			.date {
+				margin-right: 0.2rem;
+			}
+			.label {
+				margin-right: 0.2rem;
+			}
+		}
 
-      .date {
-        margin-right: 0.2rem;
-      }
-    }
+		.article-main {
+			margin-top: 0.3rem;
+			padding-bottom: 0.3rem;
+			border-bottom: 1px dashed #eee;
+		}
+	}
 
-    .article-main {
-      margin-top: 0.3rem;
-      padding-bottom: 0.3rem;
-      border-bottom: 1px dashed #eee;
-    }
-  }
+	.page {
+		padding-top: 0.3rem;
 
-  .page {
-    padding-top: 0.3rem;
+		.pre,
+		.next {
+			font-size: 0.14rem;
+		}
 
-    .pre,
-    .next {
-      font-size: 0.14rem;
-    }
+		span {
+			cursor: pointer;
+		}
+	}
 
-    span {
-      cursor: pointer;
-    }
-  }
+	.tool-bar {
+		display: none;
+	}
 
-  .tool-bar {
-    display: none;
-  }
-
-  .rc-md-editor {
-    border: none;
-        background: transparent;
-  }
+	.rc-md-editor {
+		border: none;
+		background: transparent;
+	}
 }

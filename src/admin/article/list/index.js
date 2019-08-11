@@ -48,9 +48,9 @@ class ArticleIndex extends React.Component {
 								<Button type='' style={{ marginRight: '.2rem' }} onClick={e => this.changeStatus(text._id, text.online)}>
 									{text.online ? '下线' : '上线'}
 								</Button>
-								<Button type='danger' onClick={e => this.deleteArticle(text._id)}>
+								{/* <Button type='danger' onClick={e => this.deleteArticle(text._id)}>
 									删除
-								</Button>
+								</Button> */}
 							</div>
 						)
 					}
@@ -165,7 +165,7 @@ class ArticleIndex extends React.Component {
 					</Button>
 				</section>
 				<section className='list-contain'>
-					<Table columns={this.state.columns} bordered={true} dataSource={this.state.tableList}  pagination={{ pageSize: this.state.pageSize, showSizeChanger: true, defaultCurrent: this.state.pageIndex, total: this.state.total }} onChange={this.onPage} />
+					<Table columns={this.state.columns} bordered={true} dataSource={this.state.tableList} pagination={{ pageSize: this.state.pageSize, showSizeChanger: true, defaultCurrent: this.state.pageIndex, total: this.state.total }} onChange={this.onPage} />
 				</section>
 			</div>
 		)

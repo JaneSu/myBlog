@@ -1,3 +1,3 @@
 export default {
-	website_name: 'JaneSay'
+	website_name: 'AriaSay'
 }

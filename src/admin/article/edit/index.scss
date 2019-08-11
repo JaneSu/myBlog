@@ -1,5 +1,12 @@
 .article-edit-contain {
-  .input-title {
-    width: 40%;
-  }
+	.input-title {
+		width: 40%;
+	}
+	.new-category {
+		margin-left: 0.1rem;
+	}
+	.rc-md-editor {
+		min-height: 3rem;
+		max-height: 6rem;
+	}
 }

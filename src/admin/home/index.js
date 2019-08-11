@@ -25,7 +25,7 @@ class HomeIndex extends React.Component {
 		const { token } = this.props
 		if (!token && !Cookie.get('token')) {
 			message.warn('尚未登录')
-			this.props.history.push('/admin/login')
+			this.props.history.replace('/admin/login')
 		} else {
 			let token = Cookie.get('token')
 			this.props.login(token)

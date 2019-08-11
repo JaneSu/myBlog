@@ -5,15 +5,10 @@ import MdEditor from 'react-markdown-editor-lite'
 import MarkdownIt from 'markdown-it'
 import axios from '../../../utils/axios'
 import { withRouter } from 'react-router-dom'
-
+import utils from '../../../utils/utils'
+import SModal from '../../components/sModal'
 import { Input, Form, Select, Button, Upload, Icon, message } from 'antd'
 const { Option } = Select
-
-function getBase64(img, callback) {
-	const reader = new FileReader()
-	reader.addEventListener('load', () => callback(reader.result))
-	reader.readAsDataURL(img)
-}
 
 class ArticleEdit extends React.Component {
 	constructor(props) {
@@ -28,10 +23,26 @@ class ArticleEdit extends React.Component {
 			categoryList: [],
 			loading: false,
 			imageUrl: '',
-			qiniuToken: ''
+			qiniuToken: '',
+			modalVisible: false, // 控制显示添加类别
+			modalOptions: {
+				title: '新增分类',
+				url: '/category/',
+				options: [
+					{
+						label: '名称',
+						type: 'text',
+						key: 'label',
+						rules: [{ required: true, message: '请填写名称' }]
+					}
+				]
+			}
 		}
 
 		this.uploadImage = this.uploadImage.bind(this)
+		this.inputMarkDown = this.inputMarkDown.bind(this)
+		this.addNewCategory = this.addNewCategory.bind(this)
+		this.fallbackModal = this.fallbackModal.bind(this)
 	}
 
 	componentDidMount() {
@@ -43,21 +54,31 @@ class ArticleEdit extends React.Component {
 			this.getArticleInfo(id)
 		}
 	}
+
+	/**
+	 * @description 图片上传之前的操作函数
+	 * @param {*} file 当前上传的文件
+	 * @param {*} FileList	文件列表
+	 * @returns
+	 * @memberof ArticleEdit
+	 */
 	beforeUpload(file, FileList) {
-		console.log(file, FileList)
 		return new Promise((resolve, reject) => {
 			const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
 			if (!isJpgOrPng) {
-				message.error('You can only upload JPG/PNG file!')
+				message.error('文件格式不正确')
 			}
-			const isLt2M = file.size / 1024 / 1024 < 2
+			const isLt2M = file.size / 1024 / 1024 < 4
 			if (!isLt2M) {
-				message.error('Image must smaller than 2MB!')
+				message.error('图片大小不能超过4M')
 			}
+			// 上传之前清空当前的图片
+			this.setState({
+				imageUrl: ''
+			})
 			axios('/upload', {
 				method: 'get'
 			}).then(res => {
-				console.log(res)
 				this.setState({
 					qiniuToken: res.data
 				})
@@ -71,6 +92,7 @@ class ArticleEdit extends React.Component {
 	componentWillMount() {
 		this.getCategoryList()
 	}
+
 	/**
 	 * @description 获取文章详情
 	 * @param {*} id  文章id
@@ -93,17 +115,6 @@ class ArticleEdit extends React.Component {
 			})
 		})
 	}
-	handleChange(value) {
-		this.setState({
-			mainBody: value.text
-		})
-	}
-
-	inputValue(e, type) {
-		this.setState({
-			[type]: e.currentTarget.value
-		})
-	}
 
 	// 获取分类列表
 	getCategoryList() {
@@ -120,21 +131,25 @@ class ArticleEdit extends React.Component {
 		})
 	}
 
+	/**
+	 * @description 上传图片的操作
+	 * @param {*} info 上传信息
+	 * @returns
+	 * @memberof ArticleEdit
+	 */
 	uploadImage(info) {
-		if (info.file.status === 'uploading') {
-			this.setState({ loading: true })
-			return
-		}
-		if (info.file.status === 'done') {
-			console.log(info)
-			// Get this url from response in real world.
-			getBase64(info.file.originFileObj, imageUrl =>
-				this.setState({
-					imageUrl,
-					loading: false
-				})
-			)
-			return info.file.response.hash
+		switch (info.file.status) {
+			case 'uploading':
+				this.setState({ loading: true })
+				return
+			case 'done':
+				utils.fileToBase64(info.file.originFileObj, imageUrl =>
+					this.setState({
+						imageUrl,
+						loading: false
+					})
+				)
+				return info.file.response.hash
 		}
 	}
 
@@ -158,10 +173,7 @@ class ArticleEdit extends React.Component {
 			}
 
 			let data = {
-				// title: this.state.title,
-				// category: this.props.form.getFieldsValue()['category'],
 				...values,
-				mainBody: this.state.mainBody,
 				desc
 			}
 			if (this.state.id) {
@@ -185,6 +197,32 @@ class ArticleEdit extends React.Component {
 		this.props.history.push('/admin/article/index')
 	}
 
+	// 自定义markdown编辑器的输出
+	inputMarkDown(e) {
+		return e.text
+	}
+
+	// 添加新的标签
+	addNewCategory() {
+		this.setState({
+			modalVisible: true
+		})
+	}
+
+	/**
+	 * @description 子组件返回的信息
+	 * @param {*} value
+	 * @memberof CategoryIndex
+	 */
+	fallbackModal(value, type) {
+		this.setState({
+			modalVisible: value
+		})
+		if (type) {
+			this.getCategoryList()
+		}
+	}
+
 	render() {
 		const uploadButton = (
 			<div>
@@ -194,7 +232,7 @@ class ArticleEdit extends React.Component {
 		)
 
 		const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form
-		const { imageUrl } = this.state
+		const { imageUrl, modalVisible, modalOptions } = this.state
 		return (
 			<div className='article-edit-contain'>
 				<Form labelCol={{ span: 1 }}>
@@ -202,7 +240,7 @@ class ArticleEdit extends React.Component {
 						{getFieldDecorator('title', {
 							initialValue: this.state.title ? this.state.title : '',
 							rules: [{ type: 'string', required: true, message: '请输入标题' }]
-						})(<Input placeholder='请输入标题' className='input-title' onBlur={e => this.inputValue(e, 'title')} />)}
+						})(<Input placeholder='请输入标题' className='input-title' />)}
 					</Form.Item>
 					<Form.Item label='分类'>
 						{getFieldDecorator('category', {
@@ -219,14 +257,15 @@ class ArticleEdit extends React.Component {
 								})}
 							</Select>
 						)}
+						<Button className='new-category' onClick={this.addNewCategory}>
+							添加分类
+						</Button>
 					</Form.Item>
 					<Form.Item label='题图'>
 						{getFieldDecorator('image', {
 							initialValue: this.state.imageUrl ? this.state.imageUrl : '',
 							getValueFromEvent: this.uploadImage,
-
-							rules: [{ type: 'string', required: true, message: '请选择图片' }],
-							normalize: this.normalizeImage
+							rules: [{ type: 'string', required: true, message: '请选择图片' }]
 						})(
 							<Upload name='file' listType='picture-card' data={{ token: this.state.qiniuToken }} showUploadList={false} action='http://up-z2.qiniup.com' beforeUpload={this.beforeUpload.bind(this)}>
 								{imageUrl ? <img src={imageUrl} alt='avatar' style={{ width: '100%' }} /> : uploadButton}
@@ -234,20 +273,23 @@ class ArticleEdit extends React.Component {
 						)}
 					</Form.Item>
 					<Form.Item label='内容'>
-						<MdEditor
-							ref={node => (this.mdEditor = node)}
-							value={this.state.mainBody}
-							renderHTML={text => this.mdParser.render(text)}
-							config={{
-								view: {
-									menu: true,
-									md: true,
-									html: true
-								}
-							}}
-							onChange={e => this.handleChange(e)}
-						/>
-						{/* <Editor value={this.state.mainBody} onChange={e => this.handleChange(e)} /> */}
+						{getFieldDecorator('mainBody', {
+							initialValue: this.state.mainBody ? this.state.mainBody : '',
+							getValueFromEvent: this.inputMarkDown,
+							rules: [{ type: 'string', required: true, message: '输入内容' }]
+						})(
+							<MdEditor
+								ref={node => (this.mdEditor = node)}
+								renderHTML={text => this.mdParser.render(text)}
+								config={{
+									view: {
+										menu: true,
+										md: true,
+										html: true
+									}
+								}}
+							/>
+						)}
 					</Form.Item>
 					<Form.Item>
 						<div style={{ textAlign: 'center' }}>
@@ -266,6 +308,7 @@ class ArticleEdit extends React.Component {
 						</div>
 					</Form.Item>
 				</Form>
+				<SModal visible={modalVisible} options={modalOptions.options} title={modalOptions.title} url={modalOptions.url} emit={this.fallbackModal} />
 			</div>
 		)
 	}

@@ -15,6 +15,7 @@ class ArticleInfo extends React.Component {
 			title: '',
 			createTime: '',
 			category: '',
+			readCount: '',
 			pre: [],
 			next: []
 		}
@@ -30,14 +31,15 @@ class ArticleInfo extends React.Component {
 			data: {
 				id
 			}
-		}).then(({ data: { mainBody, category, createTime, title, pre, next } }) => {
+		}).then(({ data: { mainBody, category, createTime, title, pre, next, readCount } }) => {
 			this.setState({
 				mainBody,
 				title,
 				createTime,
 				category,
 				pre,
-				next
+				next,
+				readCount
 			})
 		})
 	}
@@ -68,6 +70,7 @@ class ArticleInfo extends React.Component {
 					<section className='information'>
 						<span className='date'>创建时间：{this.state.createTime}</span>
 						<span className='label'>分类：{this.state.category}</span>
+						<span className='label'>阅读数：{this.state.readCount}</span>
 					</section>
 					<main className='article-main'>
 						<MdEditor

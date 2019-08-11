@@ -1,41 +1,41 @@
 .login-bg-img {
-  width: 100%;
-  height: 100%;
-  background: url('../../images/574e9258d109b3de8c744432cdbf6c81810a4ca4.jpg') no-repeat center 100%;
-  position: relative;
+	width: 100%;
+	height: 100%;
+	background: url('../../images/574e9258d109b3de8c744432cdbf6c81810a4ca4.jpg') no-repeat center 100%;
+	position: relative;
 
-  .login-box {
-    width: 3.5rem;
-    background: #fff;
-    padding: .2rem;
-    box-sizing: border-box;
-    position: absolute;
-    top: 50%;
-    right: 10%;
-    transform: translateY(-90%);
+	.login-box {
+		width: 3.5rem;
+		background: #fff;
+		padding: 0.2rem;
+		box-sizing: border-box;
+		position: absolute;
+		top: 50%;
+		right: 10%;
+		transform: translateY(-90%);
 
-    h1 {
-      text-align: center;
-    }
+		h1 {
+			text-align: center;
+			font-size: 0.28rem;
+		}
 
-    input {
-      margin-bottom: .3rem;
-    }
+		input {
+			margin-bottom: 0.3rem;
+		}
 
-    .button-submit {
-      width: 100%;
-    }
-  }
+		.button-submit {
+			width: 100%;
+		}
+	}
 
-  .font-desc {
-    width: 40%;
-    position: absolute;
-    bottom: 5%;
-    left: 6%;
+	.font-desc {
+		width: 40%;
+		position: absolute;
+		bottom: 5%;
+		left: 6%;
 
-    img {
-      width: 100%;
-    }
-  }
-
+		img {
+			width: 100%;
+		}
+	}
 }
