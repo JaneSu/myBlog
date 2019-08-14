@@ -46,7 +46,11 @@ class FrontIndex extends React.Component {
 			draw()
 		}
 
-		window.addEventListener('load', init(120))
+		if (window.innerWidth < 800) {
+			window.addEventListener('load', init(50))
+		} else {
+			window.addEventListener('load', init(120))
+		}
 	}
 	render() {
 		return (

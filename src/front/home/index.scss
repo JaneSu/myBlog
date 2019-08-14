@@ -1,22 +1,27 @@
 .front-home-page {
-  width: 60%;
-  margin: 0 auto 0;
-  padding-top: 0.4rem;
-  box-sizing: border-box;
-  min-height: calc(100% - 0.88rem);
-  position: relative;
-  padding-bottom: 70px;
+	width: 60%;
+	margin: 0 auto 0;
+	// padding-top: 0.4rem;
+	box-sizing: border-box;
+	min-height: calc(100% - 0.88rem);
+	position: relative;
+	padding-bottom: 70px;
 
-  .main-part {
-    .main-part-item {
-      margin-bottom: .2rem;
-    }
-  }
+	.main-part {
+		.main-part-item {
+			margin-bottom: 0.2rem;
+		}
+	}
 
-  .page-contain {
-    position: absolute;
-    bottom: 14px;
-    height: 36px;
-  }
+	.page-contain {
+		position: absolute;
+		bottom: 14px;
+		height: 36px;
+	}
+}
 
+@media screen and (max-width: 760px) {
+	.front-home-page {
+		width: 90%;
+	}
 }

@@ -20,11 +20,14 @@
 			}
 			.label {
 				margin-right: 0.2rem;
+				&:last-of-type {
+					margin-right: 0;
+				}
 			}
 		}
 
 		.article-main {
-			margin-top: 0.3rem;
+			// margin-top: 0.3rem;
 			padding-bottom: 0.3rem;
 			border-bottom: 1px dashed #eee;
 		}
@@ -50,5 +53,18 @@
 	.rc-md-editor {
 		border: none;
 		background: transparent;
+	}
+}
+
+@media screen and (max-width: 760px) {
+	.container {
+		width: 90%;
+		.article-title {
+			font-size: 0.32rem !important;
+		}
+	}
+
+	.information {
+		font-size: 0.12rem !important;
 	}
 }

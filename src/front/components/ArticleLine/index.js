@@ -14,7 +14,9 @@ function ArticleLine(props) {
 	}
 	return (
 		<div className='article-line'>
-			<div className='article-line-title'>{title}</div>
+			<div className='article-line-title' onClick={gotoInfo}>
+				{title}
+			</div>
 
 			<div className='article-line-info'>
 				<div className='date'>{date}</div>
