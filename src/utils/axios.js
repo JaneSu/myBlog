@@ -8,7 +8,6 @@ const router = new BrowserRouter()
 const instance = axios.create({
 	// baseURL: 'http://127.0.0.1:3000/api',
 	baseURL: 'http://fatearia.com/api',
-	// baseURL: 'http://47.107.40.124/api',
 	timeout: 10000,
 	headers: {}
 })

@@ -3,11 +3,13 @@ import './index.scss'
 import ArrowRight from '../../../images/arrow-right.png'
 import { withRouter } from 'react-router-dom'
 function ArticleLine(props) {
-	const { title, date, main, label, id, desc, image } = props
+	const { title, date, main, label, id, desc, image, readCount } = props
 
 	const labelStr = label.reduce((all, item) => {
 		return all + item
 	})
+
+	let _date = date.replace(/\d+:\d+/, '')
 
 	const gotoInfo = () => {
 		props.history.push('/front/article?id=' + id)
@@ -19,8 +21,9 @@ function ArticleLine(props) {
 			</div>
 
 			<div className='article-line-info'>
-				<div className='date'>{date}</div>
+				<div className='date'>{_date}</div>
 				<div className='label'>分类：{labelStr}</div>
+				<div className='count'>阅读数：{readCount}</div>
 			</div>
 			<div className='image-contain'>
 				<img src={image} alt='' />

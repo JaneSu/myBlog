@@ -25,22 +25,26 @@ class ArticleInfo extends React.Component {
 		let id = params.get('id')
 		this.getInfo(id)
 	}
+
 	getInfo(id) {
-		axios('/article/front/info', {
-			method: 'get',
-			data: {
-				id
-			}
+		axios('/article/front/info/' + id, {
+			method: 'get'
 		}).then(({ data: { mainBody, category, createTime, title, pre, next, readCount } }) => {
-			this.setState({
-				mainBody,
-				title,
-				createTime,
-				category,
-				pre,
-				next,
-				readCount
-			})
+			this.setState(
+				{
+					mainBody,
+					title,
+					createTime,
+					category,
+					pre,
+					next,
+					readCount
+				},
+				() => {
+					document.title = this.state.title
+					console.log(document.title, this.state.title)
+				}
+			)
 		})
 	}
 
