@@ -2,6 +2,7 @@ import React from 'react'
 import axios from '../../utils/axios'
 import { withRouter } from 'react-router-dom'
 import './index.scss'
+import MK from '../../components/mk'
 import MdEditor from 'react-markdown-editor-lite'
 import MarkdownIt from 'markdown-it'
 
@@ -29,7 +30,7 @@ class ArticleInfo extends React.Component {
 	getInfo(id) {
 		axios('/article/front/info/' + id, {
 			method: 'get'
-		}).then(({ data: { mainBody, category, createTime, title, pre, next, readCount } }) => {
+		}).then(({ data: { mainBodyHtml: mainBody, category, createTime, title, pre, next, readCount } }) => {
 			this.setState(
 				{
 					mainBody,
@@ -77,7 +78,18 @@ class ArticleInfo extends React.Component {
 						<span className='label'>阅读数：{this.state.readCount}</span>
 					</section>
 					<main className='article-main'>
-						<MdEditor
+						<MK
+							content={this.state.mainBody}
+							config={{
+								view: {
+									menu: false,
+									md: false,
+									html: true
+								}
+							}}
+							isEdit={false}
+						></MK>
+						{/* <MdEditor
 							ref={node => (this.mdEditor = node)}
 							value={mainBody}
 							renderHTML={text => this.mdParser.render(text)}
@@ -88,7 +100,7 @@ class ArticleInfo extends React.Component {
 									html: true
 								}
 							}}
-						/>
+						/> */}
 					</main>
 				</article>
 				<div className='page'>

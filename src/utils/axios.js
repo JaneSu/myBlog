@@ -6,8 +6,8 @@ import { BrowserRouter } from 'react-router-dom'
 const router = new BrowserRouter()
 
 const instance = axios.create({
-	// baseURL: 'http://127.0.0.1:3000/api',
-	baseURL: 'http://fatearia.com/api',
+	baseURL: 'http://127.0.0.1:3000/api',
+	// baseURL: 'http://fatearia.com/api',
 	timeout: 10000,
 	headers: {}
 })

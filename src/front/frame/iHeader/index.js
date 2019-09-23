@@ -1,6 +1,7 @@
 import React from 'react'
 import { NavLink, withRouter } from 'react-router-dom'
 import config from '../../../config'
+import jsCookie from 'js-cookie'
 import './index.scss'
 import { Icon, Drawer } from 'antd'
 class IHeader extends React.Component {
@@ -8,7 +9,8 @@ class IHeader extends React.Component {
 		super(props)
 		// this.props = props
 		this.state = {
-			drawerVisible: false
+			drawerVisible: false,
+			isAdmin: false
 		}
 	}
 
@@ -25,7 +27,25 @@ class IHeader extends React.Component {
 		})
 	}
 
+	componentWillMount() {
+		let token = jsCookie.get('token')
+		if (token) {
+			this.setState({
+				isAdmin: true
+			})
+		}
+	}
+
 	render() {
+		let isAdmin = this.state.isAdmin ? (
+			<div className='icon-admin'>
+				<NavLink to='/admin' className='nav-tab'>
+					<Icon type='global' style={{ color: '#fff', fontSize: '.2rem' }} />
+				</NavLink>
+			</div>
+		) : (
+			''
+		)
 		return (
 			<div>
 				<header className='website-header'>
@@ -38,6 +58,7 @@ class IHeader extends React.Component {
 							关于我
 						</NavLink>
 					</div>
+					{isAdmin}
 				</header>{' '}
 				<header className='website-header-phone'>
 					<div className='website-name'>{config.website_name}</div>

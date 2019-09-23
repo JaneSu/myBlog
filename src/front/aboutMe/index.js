@@ -1,15 +1,11 @@
 import React from 'react'
-
+// import MK from '../../components/mk'
+import MK from '@/components/mk'
 import axios from '../../utils/axios'
-import MdEditor from 'react-markdown-editor-lite'
-import MarkdownIt from 'markdown-it'
 import './index.scss'
 class AboutMe extends React.Component {
 	constructor(props) {
 		super(props)
-
-		this.mdParser = new MarkdownIt({ menu: false, md: false })
-		this.mdEditor = null
 
 		this.state = {
 			mainBody: ''
@@ -20,7 +16,7 @@ class AboutMe extends React.Component {
 			method: 'get'
 		}).then(res => {
 			this.setState({
-				mainBody: res.data.aboutMe
+				mainBody: res.data.aboutMeHtml
 			})
 		})
 	}
@@ -31,10 +27,8 @@ class AboutMe extends React.Component {
 		const { mainBody } = this.state
 		return (
 			<div className='front-home-page'>
-				<MdEditor
-					ref={node => (this.mdEditor = node)}
-					value={mainBody}
-					renderHTML={text => this.mdParser.render(text)}
+				<MK
+					content={this.state.mainBody}
 					config={{
 						view: {
 							menu: false,
@@ -42,7 +36,8 @@ class AboutMe extends React.Component {
 							html: true
 						}
 					}}
-				/>
+					isEdit={false}
+				></MK>
 			</div>
 		)
 	}

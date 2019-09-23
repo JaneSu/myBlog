@@ -15,10 +15,13 @@ class Home extends React.Component {
 		}
 	}
 	componentWillMount() {
+		this.getList()
+	}
+	getList() {
 		axios('/article/front/index', {
 			method: 'get',
-			params: {
-				nowPage: 1,
+			data: {
+				nowPage: this.state.pageIndex,
 				pageSize: this.state.pageSize
 			}
 		}).then(({ data: { list, total } }) => {
@@ -28,20 +31,29 @@ class Home extends React.Component {
 			})
 		})
 	}
-	onChange(page) {
-		console.log(page)
+
+	onChange(pagination, filters, sorter) {
+		debugger
+
+		this.setState(
+			{
+				pageIndex: pagination
+			},
+			this.getList
+		)
 	}
+
 	render() {
 		const list = this.state.list || []
 		return (
 			<div className='front-home-page'>
 				<section className='main-part'>
 					{list.map(item => {
-						return <ArticleLine title={item.title} date={item.createTime} label={[item.category]} main={item.mainBody} id={item._id} desc={item.desc} image={item.image} readCount={item.readCount}/>
+						return <ArticleLine title={item.title} date={item.createTime} label={[item.category]} main={item.mainBody} id={item._id} desc={item.desc} image={item.image} readCount={item.readCount} />
 					})}
 				</section>
 				<section className='page-contain'>
-					<Pagination defaultCurrent={this.pageIndex} total={this.state.total} onChange={this.onChange} />
+					<Pagination defaultCurrent={this.state.pageIndex} total={this.state.total} onChange={this.onChange.bind(this)} />
 				</section>
 			</div>
 		)

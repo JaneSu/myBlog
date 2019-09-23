@@ -1,6 +1,6 @@
 import React from 'react'
-import MdEditor from 'react-markdown-editor-lite'
-import MarkdownIt from 'markdown-it'
+import MK from '../../../components/mk'
+
 import './index.scss'
 import { Button, message } from 'antd'
 import axios from '../../../utils/axios'
@@ -9,16 +9,18 @@ import PropTypes from 'prop-types'
 class AboutUs extends React.Component {
 	constructor(props) {
 		super(props)
-		this.mdParser = new MarkdownIt({ menu: false, md: false })
+		// this.mdParser = new MarkdownIt({ menu: false, md: false })
 
 		this.state = {
-			mainBody: ''
+			mainBody: '',
+			mainBodyHtml: ''
 		}
 	}
 
 	handleChange(value) {
 		this.setState({
-			mainBody: value.text
+			mainBody: value.text,
+			mainBodyHtml: value.html
 		})
 	}
 	// 保存
@@ -26,7 +28,8 @@ class AboutUs extends React.Component {
 		axios('/setting/update', {
 			data: {
 				id: this.props.id,
-				mainBody: this.state.mainBody
+				mainBody: this.state.mainBody,
+				mainBodyHtml: this.state.mainBodyHtml
 			}
 		}).then(res => {
 			message.info(res.msg)
@@ -50,9 +53,8 @@ class AboutUs extends React.Component {
 	render() {
 		return (
 			<div className='about-me'>
-				<MdEditor
-					value={this.state.mainBody}
-					renderHTML={text => this.mdParser.render(text)}
+				<MK
+					content={this.state.mainBody}
 					config={{
 						view: {
 							menu: true,
@@ -60,8 +62,9 @@ class AboutUs extends React.Component {
 							html: true
 						}
 					}}
-					onChange={e => this.handleChange(e)}
-				/>
+					changeHandle={this.handleChange.bind(this)}
+				></MK>
+
 				<Button type='primary' className='primary_button' onClick={this.save.bind(this)}>
 					保存
 				</Button>

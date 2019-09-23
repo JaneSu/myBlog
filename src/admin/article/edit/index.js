@@ -1,8 +1,8 @@
 import React from 'react'
 import './index.scss'
 // import Editor from 'for-editor'
-import MdEditor from 'react-markdown-editor-lite'
-import MarkdownIt from 'markdown-it'
+import MK from '../../../components/mk'
+
 import axios from '../../../utils/axios'
 import { withRouter } from 'react-router-dom'
 import utils from '../../../utils/utils'
@@ -13,10 +13,10 @@ const { Option } = Select
 class ArticleEdit extends React.Component {
 	constructor(props) {
 		super(props)
-		this.mdParser = new MarkdownIt({ menu: false, md: false })
-		this.mdEditor = null
+
 		this.state = {
 			mainBody: '',
+			mainBodyHtml: '',
 			id: '',
 			title: '',
 			category: [],
@@ -161,7 +161,7 @@ class ArticleEdit extends React.Component {
 		this.props.form.validateFieldsAndScroll((err, values) => {
 			if (err) return
 			let url = '/article/add'
-			let desc = this.mdEditor.getHtmlValue()
+			let desc = this.state.mainBodyHtml
 
 			// 截取一部分作为简介保存，减少数据量
 			let descArr = desc.split('\n')
@@ -174,7 +174,8 @@ class ArticleEdit extends React.Component {
 
 			let data = {
 				...values,
-				desc
+				desc,
+				mainBodyHtml: this.state.mainBodyHtml
 			}
 			if (this.state.id) {
 				url = '/article/update'
@@ -183,7 +184,6 @@ class ArticleEdit extends React.Component {
 			axios(url, {
 				data
 			}).then(res => {
-				console.log(res)
 				this.cancelEditor()
 			})
 		})
@@ -223,7 +223,18 @@ class ArticleEdit extends React.Component {
 		}
 	}
 
+	handleChange(value) {
+		this.setState({
+			mainBodyHtml: value.html
+		})
+	}
+
 	render() {
+		function validImage(rule, value, callback) {
+			if (this.state.loading) return
+			if (!value) callback('上传图片')
+			callback()
+		}
 		const uploadButton = (
 			<div>
 				<Icon type={this.state.loading ? 'loading' : 'plus'} />
@@ -231,7 +242,7 @@ class ArticleEdit extends React.Component {
 			</div>
 		)
 
-		const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form
+		const { getFieldDecorator } = this.props.form
 		const { imageUrl, modalVisible, modalOptions } = this.state
 		return (
 			<div className='article-edit-contain'>
@@ -265,7 +276,7 @@ class ArticleEdit extends React.Component {
 						{getFieldDecorator('image', {
 							initialValue: this.state.imageUrl ? this.state.imageUrl : '',
 							getValueFromEvent: this.uploadImage,
-							rules: [{ type: 'string', required: true, message: '请选择图片' }]
+							rules: [{ type: 'string', required: true, message: '请选择图片', validator: validImage.bind(this) }]
 						})(
 							<Upload name='file' listType='picture-card' data={{ token: this.state.qiniuToken }} showUploadList={false} action='http://up-z2.qiniup.com' beforeUpload={this.beforeUpload.bind(this)}>
 								{imageUrl ? <img src={imageUrl} alt='avatar' style={{ width: '100%' }} /> : uploadButton}
@@ -276,11 +287,11 @@ class ArticleEdit extends React.Component {
 						{getFieldDecorator('mainBody', {
 							initialValue: this.state.mainBody ? this.state.mainBody : '',
 							getValueFromEvent: this.inputMarkDown,
+							trigger: 'changeHandle',
 							rules: [{ type: 'string', required: true, message: '输入内容' }]
 						})(
-							<MdEditor
-								ref={node => (this.mdEditor = node)}
-								renderHTML={text => this.mdParser.render(text)}
+							<MK
+								content={this.state.mainBody}
 								config={{
 									view: {
 										menu: true,
@@ -288,7 +299,8 @@ class ArticleEdit extends React.Component {
 										html: true
 									}
 								}}
-							/>
+								changeHandle={this.handleChange.bind(this)}
+							></MK>
 						)}
 					</Form.Item>
 					<Form.Item>
